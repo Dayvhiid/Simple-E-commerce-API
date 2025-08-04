@@ -188,20 +188,20 @@ export const getOrderById = async (req, res) => {
     }
 };
 
-// Webhook handler for Flutterwave payment notifications
+
 export const handleWebhook = async (req, res) => {
     try {
         const secretHash = process.env.FLW_SECRET_HASH;
         const signature = req.headers["verif-hash"];
         
         if (!signature || (signature !== secretHash)) {
-            // This request isn't from Flutterwave; discard
+           
             return res.status(401).end();
         }
         
         const payload = req.body;
         
-        // It's a good idea to log all received events.
+       
         console.log("Webhook received:", payload);
         
         if (payload.event === "charge.completed") {
@@ -225,7 +225,7 @@ export const handleWebhook = async (req, res) => {
                 order.paidAt = new Date();
                 await order.save();
                 
-                // Update product quantities
+    
                 for (let item of order.items) {
                     await Product.findByIdAndUpdate(
                         item.productId,
